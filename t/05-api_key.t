@@ -75,4 +75,7 @@ if (-e $file) {
     is $s, 3, "API secret from file is ok";
 }
 
+if (-e "$file.bak") {
+    move("$file.bak", $file) or die "Can't move $file.bak to $file: $!";
+}
 done_testing();

@@ -14,6 +14,7 @@ our $VERSION = '0.01';
 
 our @EXPORT = qw(host_ip_get host_ip_set);
 our @EXPORT_OK = qw(api_key_get api_key_set);
+our %EXPORT_TAGS = (all => [@EXPORT, @EXPORT_OK]);
 
 my $home_dir;
 
@@ -64,26 +65,106 @@ sub api_key_set {
 
     return 1;
 }
+sub host_ip_get {
+    my ($host, $domain) = @_;
 
-sub _api_key_file {
-    return API_KEY_FILE;
+    if (! defined $host || ! defined $domain) {
+        croak "host_ip_get() requires a hostname and domain name sent in";
+    }
+
+    my $ip = _get($host, $domain);
+
+    return $ip;
+}
+sub host_ip_set {
+    my ($host, $domain, $ip) = @_;
+
+    if (! defined $host || ! defined $domain || ! defined $ip) {
+        croak "host_ip_set() requires a hostname, domain and IP sent in";
+    }
+
+    if ($ip !~ /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/) {
+        croak "host_ip_get() received an invalid IP: $ip";
+    }
+
+    my $response = _set($host, $domain, $ip);
+
+    return $response;
 }
 
+sub _api_key_file {
+    # Returns the path and filename of the API key file (used for testing)
+    return API_KEY_FILE;
+}
 sub _get {
-    my ($url) = @_;
-    my $response = $client->get($url);
+    # Fetch the current IP of the host/domain pair
+
+    my ($host, $domain) = @_;
+
+    my $route = "/v1/domains/$domain/records/A/$host";
+
+    my $uri = URL . $route;
+
+    my ($api_key, $api_secret) = api_key_get();
+
+    my $api_auth = "$api_key:$api_secret";
+
+    my $headers = {
+        'Authorization' => "sso-key $api_auth"
+    };
+
+    my $response = $client->request('GET', $uri, {headers => $headers});
 
     my $status = $response->{status};
 
     if ($status != 200) {
-        warn "Failed to connect to $url to get your address: $response->{content}";
+        warn "Failed to connect to $uri to get your address: $response->{content}";
         return '';
     }
 
-    return $response->{content};
+    my $ip = decode_json($response->{content})->[0]{data};
+
+    return $ip;
 }
+sub _set {
+    # Set the host to a new IP
 
+    my ($host, $domain, $ip) = @_;
 
+    my $route = "/v1/domains/$domain/records/A/$host";
+
+    my $uri = URL . $route;
+
+    my ($api_key, $api_secret) = api_key_get();
+
+    my $api_auth = "$api_key:$api_secret";
+
+    my $headers = {
+        'Authorization' => "sso-key $api_auth",
+        'Content-Type'  => 'application/json',
+    };
+
+    my $content = [{ data => $ip }];
+    my $content_json = encode_json($content);
+
+    my $response = $client->request(
+        'PUT',
+        $uri,
+        {
+            headers => $headers,
+            content => $content_json
+        }
+    );
+
+    my $status = $response->{status};
+
+    if ($status != 200) {
+        warn "Failed to connect to $uri to get your address: $response->{content}";
+        return 0;
+    }
+
+    return $response->{success};
+}
 sub __placeholder {}
 
 1;
@@ -103,11 +184,14 @@ domains
     use Net::DynDNS::GoDaddy;
     use Net::MyIP;
 
-    my $current_host_ip = host_ip_get();
+    my $hostname = 'home';
+    my $domain   = 'example.com';
+
+    my $current_host_ip = host_ip_get($host, $domain);
     my $my_ip = myip();
 
     if ($current_host_ip ne $my_ip) {
-        host_ip_set($my_ip);
+        host_ip_set($host, $domain, $my_ip);
     }
 
 =head1 DESCRIPTION
@@ -117,12 +201,49 @@ name to IP mapping.
 
 =head1 FUNCTIONS
 
+=head2 host_ip_get($host, $domain)
+
+Returns the currently set IP address of the DNS A record for the
+host/domain pair.
+
+I<Parameters>:
+
+    $host
+
+I<Mandatory, String>: The name of the host, eg. C<www>.
+
+    $domain
+
+I<Mandatory, String>: The name of the domain, eg. C<example.com>.
+
+I<Returns>: String, the IP address that's currently set for the record.
+
+=head2 host_ip_set($host, $domain, $ip)
+
+Updates the DNS A record for the host/domain pair.
+
+I<Parameters>:
+
+    $host
+
+I<Mandatory, String>: The name of the host, eg. C<www>.
+
+    $domain
+
+I<Mandatory, String>: The name of the domain, eg. C<example.com>.
+
+    $ip
+
+I<Mandatory, String>: The IP address to set the record to eg. C<192.168.10.10>.
+
+I<Returns>: Bool, C<1> on success, C<0> on failure.
+
 =head2 api_key_get
 
 Fetch your GoDaddy API key and secret from the previously created
 C<godaddy_api.json> in your home directory.
 
-B<Not exported by default>.
+B<Not exported by default>, use the C<qw(:all)> tag to access it.
 
 Croaks if the file can't be read.
 
@@ -133,7 +254,7 @@ I<Returns:> A list of two scalars, the API key and the API secret.
 Creates the C<godaddy_api.json> file in your home directory that contains your
 GoDaddy API key and secret.
 
-B<Not exported by default>.
+B<Not exported by default>, use the C<qw(:all)> tag to access it.
 
 I<Parameters>:
 
