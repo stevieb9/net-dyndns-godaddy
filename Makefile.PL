@@ -27,6 +27,7 @@ my %WriteMakefileArgs = (
         'ExtUtils::MakeMaker' => '0',
     },
     TEST_REQUIRES => {
+        'Mock::Sub'  => '0',
         'Test::More' => '0',
     },
     PREREQ_PM => {
@@ -34,6 +35,7 @@ my %WriteMakefileArgs = (
         'HTTP::Tiny'        => 0,
         'JSON'              => 0,
         'IO::Socket::SSL'   => 0,
+        'Net::MyIP'         => 0,
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'Net-DynDNS-GoDaddy-*' },

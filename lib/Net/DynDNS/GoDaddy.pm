@@ -196,8 +196,22 @@ domains
 
 =head1 DESCRIPTION
 
+For end-users, see the documentation for the
+L<update-ip binary|https://metacpan.org/pod/distribution/Net::DynDNS::GoDaddy/bin/update-ip.pod>.
+
 Provides an interface to allow dynamically updating your GoDaddy domain's DNS
 name to IP mapping.
+
+You must have a C<~/godaddy_api.json> file containing your GoDaddy API key and
+secret, in the following format:
+
+    {
+        "api_key": "KEY DATA",
+        "api_secret": "API SECRET"
+    }
+
+The L<update-ip binary|https://metacpan.org/pod/distribution/Net::DynDNS::GoDaddy/bin/update-ip.pod>
+binary will do this for you automatically on first run.
 
 =head1 FUNCTIONS
 
