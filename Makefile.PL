@@ -8,6 +8,7 @@ my %WriteMakefileArgs = (
     AUTHOR           => q{Steve Bertrand <steveb@cpan.org>},
     VERSION_FROM     => 'lib/Net/DynDNS/GoDaddy.pm',
     ABSTRACT_FROM    => 'lib/Net/DynDNS/GoDaddy.pm',
+    EXE_FILES        => [qw(bin/update-ip)],
     LICENSE          => 'artistic_2',
     MIN_PERL_VERSION => '5.006',
     META_MERGE => {
