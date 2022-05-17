@@ -32,11 +32,11 @@ my %WriteMakefileArgs = (
         'Test::More' => '0',
     },
     PREREQ_PM => {
+        'Addr::MyIP'        => 0,
         'File::HomeDir'     => 0,
         'HTTP::Tiny'        => 0,
         'JSON'              => 0,
         'IO::Socket::SSL'   => 0,
-        'Net::MyIP'         => 0,
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'Net-DynDNS-GoDaddy-*' },

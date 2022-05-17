@@ -2,9 +2,9 @@
 use warnings;
 use strict;
 
+use Addr::MyIP;
 use Data::Dumper;
 use Net::DynDNS::GoDaddy qw(:all);
-use Net::MyIP;
 
 my ($host, $domain, $new_ip) = @ARGV;
 

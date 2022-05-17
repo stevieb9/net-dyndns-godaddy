@@ -52,7 +52,7 @@ if ($ENV{STEVEB_DEV_TESTING}) {
     is $ip, $saved_ip, "Got the saved IP ok";
 }
 else {
-    note "STEVEB_DEV_TESTING env var not set, not running live tests";
+    warn "STEVEB_DEV_TESTING env var not set, not running live tests";
 }
 
 # mocked success
