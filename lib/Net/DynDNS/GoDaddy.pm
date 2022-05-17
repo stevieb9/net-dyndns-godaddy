@@ -182,7 +182,7 @@ domains
 =head1 SYNOPSIS
 
     use Net::DynDNS::GoDaddy;
-    use Net::MyIP;
+    use Addr::MyIP;
 
     my $hostname = 'home';
     my $domain   = 'example.com';

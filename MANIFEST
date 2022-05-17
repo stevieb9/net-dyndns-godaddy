@@ -9,6 +9,7 @@ t/00-load.t
 t/05-api_key.t
 t/10-host_ip_get.t
 t/15-host_ip_set.t
+t/20-api_fail.t
 t/manifest.t
 t/pod-coverage.t
 t/pod.t

@@ -28,8 +28,9 @@ my %WriteMakefileArgs = (
         'ExtUtils::MakeMaker' => '0',
     },
     TEST_REQUIRES => {
-        'Mock::Sub'  => '0',
-        'Test::More' => '0',
+        'Hook::Output::Tiny' => 0,
+        'Mock::Sub'          => '0',
+        'Test::More'         => '0',
     },
     PREREQ_PM => {
         'Addr::MyIP'        => 0,
