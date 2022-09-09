@@ -78,4 +78,8 @@ if (-e $file) {
 if (-e "$file.bak") {
     move("$file.bak", $file) or die "Can't move $file.bak to $file: $!";
 }
+else {
+    unlink $file or die "Can't remove temp config file";
+    is -e $file, undef, "Removed temp config file ok";
+}
 done_testing();
