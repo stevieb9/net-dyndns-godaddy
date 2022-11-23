@@ -21,8 +21,8 @@ if (-e $file) {
     like $@, qr/doesn't exist/, "...and error message is sane";
 }
 
-# api_key_set() croak if can't write file
-{
+# api_key_set() croak if can't write file (only run if not root user)
+if (getpwuid($<) ne 'root') {
     open my $fh, '>', $file or die "Can't open $file for creation: $!";
     chmod(0400, $file) or die "Can't set permissions on $file: $!";
     close $fh;
