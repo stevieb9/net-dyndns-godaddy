@@ -1,7 +1,8 @@
 Revision history for Net-DynDNS-GoDaddy
 
 0.04 UNREL
-    -
+    - Fix issue where tests were failing in Github Actions because the API key
+      config file isn't stored in between test runs
 
 0.03    2022-11-23
     - Fix API key tests so if a test config file is created, it's removed

@@ -2,7 +2,7 @@ use warnings;
 use strict;
 
 use Mock::Sub;
-use Net::DynDNS::GoDaddy;
+use Net::DynDNS::GoDaddy qw(:all);
 use Test::More;
 
 my $saved_ip = '10.10.10.10';
@@ -57,6 +57,9 @@ else {
 
 # mocked success
 {
+    # Set an API key file for testing
+    api_key_set(2, 3);
+
     my $m = Mock::Sub->new;
     my $r_sub = $m->mock('HTTP::Tiny::request');
 
