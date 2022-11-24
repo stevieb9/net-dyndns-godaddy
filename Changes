@@ -1,6 +1,6 @@
 Revision history for Net-DynDNS-GoDaddy
 
-0.03 UNREL
+0.03    2022-11-23
     - Fix API key tests so if a test config file is created, it's removed
       afterwards
     - Skip api key file write test if we're the root user
