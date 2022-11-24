@@ -1,6 +1,6 @@
 Revision history for Net-DynDNS-GoDaddy
 
-0.04 UNREL
+0.04    2022-11-23
     - Fix issue where tests were failing in Github Actions because the API key
       config file isn't saved between test script executions
     - When checking to see if we croak() if we can't write to the API key file,
