@@ -56,7 +56,7 @@ if ($current_ip ne $local_ip) {
     }
 }
 else {
-    print "Not updating the '$host.$domain' record, IPs are the same\n";
+    print "Not updating the '$host.$domain' record, IP '$current_ip' is still current\n";
 }
 
 sub help {
